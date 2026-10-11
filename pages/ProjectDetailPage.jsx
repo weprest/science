@@ -105,7 +105,7 @@ export default function ProjectDetailPage() {
           <p className="kicker">{t('PROJECT /')} {t(project.status)}</p>
           <h3>{t(project.name)}</h3>
         </div>
-        {projectSlug === 'forensic-nursing-scientific-day' && (
+        {['forensic-nursing-scientific-day', 'patient-safety-health-economics-scientific-day'].includes(projectSlug) && (
           <div className="project-authority-logos" aria-label="Event authorities">
             <img src={ministryLogo} alt="Ministry of Interior emblem" loading="lazy" decoding="async" />
             <img src={medicalServicesLogo} alt="Medical Services Sector emblem" loading="lazy" decoding="async" />
