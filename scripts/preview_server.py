@@ -1,9 +1,26 @@
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+import re
 from urllib.parse import urlsplit
 
 
 ROOT = Path(__file__).resolve().parent.parent
+REDIRECTS = {
+    '/about': '/about.html',
+    '/services': '/services.html',
+    '/our-work': '/work.html',
+    '/our-events': '/work.html',
+    '/case-studies': '/case-studies.html',
+    '/science-experience': '/experience.html',
+    '/team': '/team.html',
+    '/contact': '/contact.html',
+    '/social': '/social.html',
+}
+CLIENT_ROUTES = (
+    re.compile(r'^/(?:about|services|science-experience|team)/[^/]+/?$'),
+    re.compile(r'^/our-work/[^/]+/?$'),
+    re.compile(r'^/our-work/[^/]+/gallery/?$'),
+)
 
 
 class PreviewHandler(SimpleHTTPRequestHandler):
@@ -13,6 +30,12 @@ class PreviewHandler(SimpleHTTPRequestHandler):
     def send_head(self):
         request_path = urlsplit(self.path).path
         file_path = Path(self.translate_path(request_path)).resolve()
+
+        if request_path in REDIRECTS:
+            self.send_response(301)
+            self.send_header('Location', REDIRECTS[request_path])
+            self.end_headers()
+            return None
 
         try:
             file_path.relative_to(ROOT)
@@ -27,11 +50,12 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         if file_path.is_file() or file_path.is_dir():
             return super().send_head()
 
-        if request_path.startswith('/assets/'):
+        if any(route.fullmatch(request_path) for route in CLIENT_ROUTES):
+            self.path = '/index.html'
             return super().send_head()
 
-        self.path = '/index.html'
-        return super().send_head()
+        self.send_error(404, 'File not found')
+        return None
 
 
 if __name__ == '__main__':

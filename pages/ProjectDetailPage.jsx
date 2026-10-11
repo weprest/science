@@ -136,7 +136,7 @@ export default function ProjectDetailPage() {
         </div>
       )}
 
-      <div className="event-highlights" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      <div id="gallery" className="event-highlights" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
         <div className="event-highlights-header">
           <p className="kicker">Event Highlights</p>
           <div className="event-highlights-controls">
@@ -217,7 +217,7 @@ export default function ProjectDetailPage() {
       )}
 
       {projectSlug === 'forensic-nursing-scientific-day' && (
-        <section className="event-videos" aria-labelledby="event-videos-title">
+        <section id="videos" className="event-videos" aria-labelledby="event-videos-title">
           <div className="event-highlights-header">
             <p className="kicker" id="event-videos-title">Event Videos</p>
             {videos.length > 1 && (

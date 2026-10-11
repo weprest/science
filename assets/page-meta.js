@@ -132,6 +132,66 @@
     window.dispatchEvent(new Event('site:routechange'))
   }
 
+  let lastHashLocation = ''
+  let hashScrollFrame = 0
+
+  const navigateToHash = () => {
+    const hash = window.location.hash
+    if (!hash) {
+      lastHashLocation = ''
+      return
+    }
+
+    const location = `${window.location.pathname}${hash}`
+    if (location === lastHashLocation || hashScrollFrame) {
+      return
+    }
+
+    hashScrollFrame = window.requestAnimationFrame(() => {
+      hashScrollFrame = 0
+      if (`${window.location.pathname}${window.location.hash}` !== location) {
+        navigateToHash()
+        return
+      }
+
+      let targetId = hash.slice(1)
+      try {
+        targetId = decodeURIComponent(targetId)
+      } catch {
+        return
+      }
+
+      const target = document.getElementById(targetId)
+      if (!target) {
+        return
+      }
+
+      target.scrollIntoView({ block: 'start' })
+      lastHashLocation = location
+    })
+  }
+
+  const addEventSectionIds = () => {
+    const sections = [
+      ['.event-highlights', 'gallery'],
+      ['.event-videos', 'videos'],
+      ['.event-photo-grid', 'gallery'],
+    ]
+
+    for (const [selector, id] of sections) {
+      const section = document.querySelector(selector)
+      if (section && !section.id) {
+        section.id = id
+      }
+    }
+  }
+
+  const updatePage = () => {
+    updateMetadata()
+    addEventSectionIds()
+    navigateToHash()
+  }
+
   for (const method of ['pushState', 'replaceState']) {
     const original = window.history[method]
     window.history[method] = function (...args) {
@@ -141,17 +201,22 @@
     }
   }
 
-  window.addEventListener('popstate', updateMetadata)
-  window.addEventListener('site:routechange', updateMetadata)
-  new MutationObserver(updateMetadata).observe(document.documentElement, {
+  window.addEventListener('popstate', updatePage)
+  window.addEventListener('hashchange', navigateToHash)
+  window.addEventListener('site:routechange', updatePage)
+  new MutationObserver(updatePage).observe(document.getElementById('root'), {
+    childList: true,
+    subtree: true,
+  })
+  new MutationObserver(updatePage).observe(document.documentElement, {
     attributes: true,
     attributeFilter: ['lang'],
   })
-  new MutationObserver(updateMetadata).observe(document.head, {
+  new MutationObserver(updatePage).observe(document.head, {
     subtree: true,
     childList: true,
     characterData: true,
   })
 
-  updateMetadata()
+  updatePage()
 })()

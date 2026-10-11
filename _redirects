@@ -11,11 +11,5 @@
 /about/* /about.html 200
 /services/* /services.html 200
 /our-work/* /work.html 200
-/our-events/* /work.html 200
-/case-studies/* /case-studies.html 200
 /science-experience/* /experience.html 200
 /team/* /team.html 200
-/contact/* /contact.html 200
-/social/* /social.html 200
-
-/* /index.html 200

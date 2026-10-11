@@ -12,7 +12,7 @@ export default function EventGalleryPage() {
   }
 
   return (
-    <section className="page-shell section-wrap">
+    <section id="gallery" className="page-shell section-wrap">
       <Link className="detail-back" to={`/our-work/${projectSlug}`}>
         Back to event
       </Link>
