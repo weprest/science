@@ -82,6 +82,19 @@ textarea:focus-visible {
   resize: vertical;
 }
 
+.event-highlights > .event-video-empty {
+  min-height: clamp(220px, 35vw, 360px);
+  border: 1px solid var(--line);
+  background: #070b12f5;
+}
+
+.event-gallery-shortcuts--empty {
+  min-height: 84px;
+  border: 1px dashed var(--line);
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
 .event-photo-item img,
 .team-avatar img,
 .project-media img {

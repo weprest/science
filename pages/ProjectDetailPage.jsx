@@ -19,7 +19,7 @@ export default function ProjectDetailPage() {
   const project = currentIndex === -1 ? null : projectPillars[currentIndex]
   const previousProject = currentIndex <= 0 ? null : projectPillars[currentIndex - 1]
   const nextProject = currentIndex === -1 || currentIndex >= projectPillars.length - 1 ? null : projectPillars[currentIndex + 1]
-  const highlights = project ? eventHighlights[projectSlug] ?? eventHighlights.default : eventHighlights.default
+  const highlights = project ? eventHighlights[projectSlug] ?? [] : []
   const videos = project ? eventVideos[projectSlug] ?? [] : []
   const hasExtendedEventInfo = Boolean(project?.eventTitle)
   const galleryPhotos = project ? eventGalleryPhotos[projectSlug] ?? [] : []
@@ -113,7 +113,7 @@ export default function ProjectDetailPage() {
         )}
       </div>
 
-      {hasExtendedEventInfo && (
+      {hasExtendedEventInfo ? (
         <div className="event-info-card event-info-card--feature event-overview-before-highlights">
           <p className="mini-label">EVENT OVERVIEW</p>
           <h4>{project.eventTitle}</h4>
@@ -134,50 +134,92 @@ export default function ProjectDetailPage() {
             </div>
           </div>
         </div>
+      ) : (
+        <div className="event-info-card event-info-card--feature event-overview-before-highlights">
+          <p className="mini-label">EVENT OVERVIEW</p>
+          <h4>{t(project.name)}</h4>
+          <p className="event-subtitle">{t(project.label)}</p>
+          {projectSlug === 'patient-safety-health-economics-scientific-day' && (
+            <>
+              <p className="event-paragraph">
+                A scientific event focused on Patient Safety and Health Economics, bringing together healthcare professionals to highlight the importance of patient safety and the role of health economics in improving healthcare quality, efficiency, and sustainability.
+              </p>
+              <div className="event-meta-grid">
+                <div>
+                  <span>Event Type</span>
+                  <strong>Scientific Day</strong>
+                </div>
+                <div>
+                  <span>Date</span>
+                  <strong>12 September 2026</strong>
+                </div>
+                <div>
+                  <span>Venue</span>
+                  <strong>Police Hospital, Nasr City, Cairo, Egypt</strong>
+                </div>
+                <div>
+                  <span>Event Organizer / Management</span>
+                  <strong>Science Event Management</strong>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       )}
 
-      <div id="gallery" className="event-highlights" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-        <div className="event-highlights-header">
-          <p className="kicker">Event Highlights</p>
-          <div className="event-highlights-controls">
-            <button type="button" className="highlight-arrow" onClick={showPreviousSlide} aria-label="Previous slide">
-              ‹
-            </button>
-            <button type="button" className="highlight-arrow" onClick={showNextSlide} aria-label="Next slide">
-              ›
-            </button>
-            <span className="swipe-hint">Swipe</span>
+      {highlights.length > 0 ? (
+        <div id="gallery" className="event-highlights" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+          <div className="event-highlights-header">
+            <p className="kicker">Event Highlights</p>
+            <div className="event-highlights-controls">
+              <button type="button" className="highlight-arrow" onClick={showPreviousSlide} aria-label="Previous slide">
+                ‹
+              </button>
+              <button type="button" className="highlight-arrow" onClick={showNextSlide} aria-label="Next slide">
+                ›
+              </button>
+              <span className="swipe-hint">Swipe</span>
+            </div>
           </div>
-        </div>
 
-        <div className="highlight-viewport" aria-live="polite">
-          <div
-            className="highlight-track"
-            style={{ transform: `translateX(-${activeSlide * 100}%)` }}
-          >
+          <div className="highlight-viewport" aria-live="polite">
+            <div
+              className="highlight-track"
+              style={{ transform: `translateX(-${activeSlide * 100}%)` }}
+            >
+              {shuffledHighlights.current.map((highlight, index) => (
+                <figure className="highlight-slide" key={`${highlight.src}-${highlight.caption}-${index}`}>
+                  <img src={highlight.src} alt={highlight.alt} loading="lazy" decoding="async" />
+                  <figcaption>{highlight.caption}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+
+          <div className="highlight-dots" aria-label="Highlight slides">
             {shuffledHighlights.current.map((highlight, index) => (
-              <figure className="highlight-slide" key={`${highlight.src}-${highlight.caption}-${index}`}>
-                <img src={highlight.src} alt={highlight.alt} loading="lazy" decoding="async" />
-                <figcaption>{highlight.caption}</figcaption>
-              </figure>
+              <button
+                key={`${highlight.src}-dot-${index}`}
+                type="button"
+                className={index === activeSlide ? 'is-active' : ''}
+                aria-label={`Go to slide ${index + 1}`}
+                onClick={() => setActiveSlide(index)}
+              />
             ))}
           </div>
         </div>
+      ) : (
+        <section id="gallery" className="event-highlights" aria-label="Event photo gallery">
+          <div className="event-highlights-header">
+            <p className="kicker">Event Highlights</p>
+          </div>
+          <div className="event-video-empty">
+            <p>Event photos will be added here</p>
+          </div>
+        </section>
+      )}
 
-        <div className="highlight-dots" aria-label="Highlight slides">
-          {shuffledHighlights.current.map((highlight, index) => (
-            <button
-              key={`${highlight.src}-dot-${index}`}
-              type="button"
-              className={index === activeSlide ? 'is-active' : ''}
-              aria-label={`Go to slide ${index + 1}`}
-              onClick={() => setActiveSlide(index)}
-            />
-          ))}
-        </div>
-      </div>
-
-      {projectSlug === 'forensic-nursing-scientific-day' && (
+      {galleryPhotos.length > 0 ? (
         <div className="event-gallery-shortcuts" aria-label="Open event photo gallery">
           <button
             type="button"
@@ -214,10 +256,13 @@ export default function ProjectDetailPage() {
             ›
           </button>
         </div>
+      ) : (
+        <div className="event-gallery-shortcuts event-gallery-shortcuts--empty" aria-label="Event photo previews">
+          <span>Photo previews will be added here</span>
+        </div>
       )}
 
-      {projectSlug === 'forensic-nursing-scientific-day' && (
-        <section id="videos" className="event-videos" aria-labelledby="event-videos-title">
+      <section id="videos" className="event-videos" aria-labelledby="event-videos-title">
           <div className="event-highlights-header">
             <p className="kicker" id="event-videos-title">Event Videos</p>
             {videos.length > 1 && (
@@ -261,7 +306,34 @@ export default function ProjectDetailPage() {
               </div>
             )}
           </div>
-        </section>
+      </section>
+
+      {projectSlug === 'patient-safety-health-economics-scientific-day' && (
+        <div className="event-info-layout">
+          <div className="event-info-card event-info-card--full">
+            <p className="mini-label">EVENT THEMES</p>
+            <ul className="event-list">
+              <li>Patient Safety</li>
+              <li>Health Economics</li>
+              <li>Healthcare Quality</li>
+              <li>Healthcare Efficiency</li>
+              <li>Sustainable Healthcare</li>
+            </ul>
+          </div>
+
+          <div className="event-info-card event-info-card--full">
+            <p className="mini-label">ADDITIONAL INFORMATION</p>
+            <div className="event-meta-grid">
+              <div><span>Scientific Program</span><strong>Not provided</strong></div>
+              <div><span>Speakers</span><strong>Not provided</strong></div>
+              <div><span>Event Partners</span><strong>Not provided</strong></div>
+              <div><span>Sponsors</span><strong>Not provided</strong></div>
+              <div><span>Attendance</span><strong>Not provided</strong></div>
+              <div><span>Registration Link</span><strong>Not provided</strong></div>
+              <div><span>Official Event Banner</span><strong>Not provided</strong></div>
+            </div>
+          </div>
+        </div>
       )}
 
       {hasExtendedEventInfo && (
