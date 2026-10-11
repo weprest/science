@@ -1,26 +1,40 @@
-# SCIENCE EVENT MANAGEMENT
+# ScienceF
 
-## تنظيم المشروع
+This repository contains the ScienceF website and a .NET 10 F# class library.
 
-- ملفات HTML في جذر المشروع هي نقاط دخول الموقع للصفحات والروابط المباشرة.
-- `_redirects` يعرّف مسارات النشر في Netlify؛ القواعد محصورة بالمسارات الديناميكية الفعلية ولا تعترض الملفات الثابتة أو المسارات غير المعروفة.
-- `/our-events` رابط مختصر يحوّل الزائر إلى صفحة الفعاليات `/work.html`.
-- المسارات المتداخلة المعروفة تُعاد كتابتها إلى صفحة التطبيق المناسبة، أما المسارات غير الموجودة فتبقى 404.
-- روابط أقسام الصفحة الرئيسية تستخدم المعرّفات `#home` و`#about` و`#services` و`#team` و`#work` و`#experience` و`#contact`. صفحات الفعاليات تستخدم `#gallery` و`#videos` عند توفر القسم.
-- `assets/` يحتوي ملفات الموقع المنشورة، بما فيها ملفات JavaScript وCSS والوسائط. الأسماء المولّدة مرتبطة بمراجع داخل الموقع، لذلك لا تُعدّلها أو تنقلها يدويًا.
-- `assets/responsive.css` يضم تحسينات العرض المشتركة للهاتف والتابلت والديسكتوب، ويُحمّل بعد التنسيقات الأساسية.
-- `assets/page-meta.js` يحدّث عنوان ووصف الصفحة عند التنقل بين المسارات أو تغيير اللغة.
-- `assets/eventMedia-ilUNrfqD.js` يحتوي فقط مراجع الوسائط الموجودة داخل المشروع؛ ملفات الصور والفيديو غير المتوفرة لا تُضاف إلى المعارض.
-- `pages/` يحتوي مكوّنات JSX منفصلة، وليس مصدر بناء مكتملًا حاليًا؛ بعض اعتماداته مثل `data/` و`i18n` غير موجودة في المستودع.
-- `references/` يحتوي مواد مرجعية للتصميم والعلامة التجارية، وليس ملفات الموقع المنشور.
-- `public/_redirects` نسخة إضافية من إعداد إعادة التوجيه. عند تحديث المسارات، حافظ على تطابق النسختين.
+## Projects
 
-## ملاحظات النشر
+```text
+science.F/
+├── src/                # React + Vite website
+├── ScienceF/           # F# class library
+├── ScienceF.slnx       # .NET solution file
+└── science-website/     # Static website
+```
 
-هذا المستودع لا يحتوي حاليًا على `package.json` أو إعداد بناء. انشر ملفات الجذر و`assets/` كما هي، ولا تنقلها إلى مجلدات فرعية دون تحديث إعدادات النشر وكل المراجع إلى الملفات.
+## Run the website
 
-لم تُضمّن جميع ملفات وسائط الفعاليات الأصلية في المستودع؛ تعرض المعارض الصور المتاحة فقط.
+```bash
+npm install
+npm run dev
+```
 
-## المعاينة المحلية
+## Build
 
-شغّل مهمة **Preview website** من VS Code. خادم `scripts/preview_server.py` يقتصر على `127.0.0.1` ويوجّه مسارات التطبيق المعروفة فقط، مع إبقاء المسارات والملفات غير الموجودة كأخطاء 404.
+```bash
+npm run build
+dotnet build ScienceF.slnx
+```
+
+## Website pages
+
+The Vite build produces a separate HTML entry point for each top-level page:
+`index.html`, `about.html`, `services.html`, `work.html`, `case-studies.html`,
+`experience.html`, `team.html`, `contact.html`, and `social.html`. Navigation
+uses these files directly. The Apache and static-host redirect rules preserve
+existing clean URLs and map detail URLs to the entry point for their section.
+
+To add a top-level page, add its HTML entry to `pageEntries` in `vite.config.js`,
+add a route in `src/App.jsx`, and add its navigation/redirect rules if needed.
+Shared shell styles and components remain in `src/`; page content stays in
+`src/pages/`.
