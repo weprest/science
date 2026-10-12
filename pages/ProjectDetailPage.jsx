@@ -105,7 +105,7 @@ export default function ProjectDetailPage() {
           <p className="kicker">{t('PROJECT /')} {t(project.status)}</p>
           <h3>{t(project.name)}</h3>
         </div>
-        {['forensic-nursing-scientific-day', 'patient-safety-health-economics-scientific-day'].includes(projectSlug) && (
+        {['forensic-nursing-scientific-day', 'patient-safety-health-economics-scientific-day', 'egypt-womens-health-summit'].includes(projectSlug) && (
           <div className="project-authority-logos" aria-label="Event authorities">
             <img src={ministryLogo} alt="Ministry of Interior emblem" loading="lazy" decoding="async" />
             <img src={medicalServicesLogo} alt="Medical Services Sector emblem" loading="lazy" decoding="async" />
@@ -164,6 +164,63 @@ export default function ProjectDetailPage() {
               </div>
             </>
           )}
+        </div>
+      )}
+
+      {projectSlug === 'egypt-womens-health-summit' && (
+        <div className="event-info-layout">
+          <div className="event-info-card event-info-card--full">
+            <p className="mini-label">SUMMIT OVERVIEW</p>
+            <div className="event-meta-grid">
+              <div><span>Theme</span><strong>The National Agenda Proposal</strong></div>
+              <div><span>Date</span><strong>5–6 October 2026</strong></div>
+              <div><span>Venue</span><strong>Cairo Marriott Hotel, Cairo, Egypt</strong></div>
+              <div><span>Organizer</span><strong>Science Event Management</strong></div>
+              <div><span>Official Authority</span><strong>Ministry of Interior</strong></div>
+              <div><span>Associated Initiative</span><strong>Police Medical Services Initiative</strong></div>
+            </div>
+          </div>
+
+          <div className="event-info-card">
+            <p className="mini-label">ABOUT EWHS</p>
+            <p className="event-paragraph">
+              The Egypt Women’s Health Summit is a platform focused on advancing women’s health in Egypt and encouraging collaboration among healthcare institutions, government entities, private-sector organizations, and civil society.
+            </p>
+          </div>
+
+          <div className="event-info-card">
+            <p className="mini-label">PROPOSED SUMMIT FOCUS AREAS</p>
+            <p className="event-paragraph">These are proposed areas of focus, not a confirmed final scientific program.</p>
+            <ul className="event-list">
+              <li>Women’s and maternal health</li>
+              <li>Maternal morbidity and mortality</li>
+              <li>Non-communicable diseases</li>
+              <li>Reproductive health</li>
+              <li>Mental health</li>
+              <li>Lifestyle medicine</li>
+              <li>Telemedicine and digital health</li>
+              <li>Medical tourism</li>
+              <li>Health awareness and collaboration between healthcare institutions</li>
+            </ul>
+          </div>
+
+          <div className="event-info-card event-info-card--full">
+            <p className="mini-label">ORGANIZER — SCIENCE EVENT MANAGEMENT</p>
+            <img
+              src="/assets/science-mark-transparent-B-SVjxf4.png"
+              alt="Science Event Management logo"
+              loading="lazy"
+              decoding="async"
+              style={{ width: '72px', height: '72px', objectFit: 'contain' }}
+            />
+            <div className="event-meta-grid">
+              <div><span>Website</span><strong><a href="https://www.elmawy.com/" target="_blank" rel="noreferrer">elmawy.com</a></strong></div>
+              <div><span>Email</span><strong><a href="mailto:Science@elmawy.com">Science@elmawy.com</a></strong></div>
+              <div><span>Phone</span><strong><a href="tel:01020180180">01020180180</a></strong></div>
+              <div><span>Phone</span><strong><a href="tel:01095828282">01095828282</a></strong></div>
+              <div><span>Address</span><strong>Unit 1, 2nd Floor, Maxim Mall, North 90th Street, New Cairo, Cairo, Egypt.</strong></div>
+            </div>
+          </div>
         </div>
       )}
 
