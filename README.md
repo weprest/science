@@ -1,40 +1,36 @@
-# ScienceF
+# Science Event Management website
 
-This repository contains the ScienceF website and a .NET 10 F# class library.
+The repository's production website is assembled from the nine root HTML entry
+points and the compiled runtime bundles in `assets/`. The JSX files under
+`pages/` are not the inputs to the current production build.
 
-## Projects
-
-```text
-science.F/
-├── src/                # React + Vite website
-├── ScienceF/           # F# class library
-├── ScienceF.slnx       # .NET solution file
-└── science-website/     # Static website
-```
-
-## Run the website
+## Run locally
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-## Build
+## Production build
 
 ```bash
 npm run build
-dotnet build ScienceF.slnx
 ```
 
-## Website pages
+Vite writes the deployable static site to `dist/`. It contains the nine HTML
+entry points, compiled JavaScript/CSS, runtime metadata script, media assets,
+and the static-host redirect rules from `public/_redirects`.
+
+Upload the **contents of `dist/`** to the hosting document root. Do not upload
+the repository root or `node_modules/`. The redirect rules require a static
+host that supports Netlify-style `_redirects` files; configure equivalent
+rewrites on other hosts before deployment.
+
+## Pages and routing
 
 The Vite build produces a separate HTML entry point for each top-level page:
 `index.html`, `about.html`, `services.html`, `work.html`, `case-studies.html`,
 `experience.html`, `team.html`, `contact.html`, and `social.html`. Navigation
 uses these files directly. The Apache and static-host redirect rules preserve
 existing clean URLs and map detail URLs to the entry point for their section.
-
-To add a top-level page, add its HTML entry to `pageEntries` in `vite.config.js`,
-add a route in `src/App.jsx`, and add its navigation/redirect rules if needed.
-Shared shell styles and components remain in `src/`; page content stays in
-`src/pages/`.
+The rules are provided in `public/_redirects` for compatible static hosts.
